@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CorpGuru Consultancy</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+    }
+    header {
+      background: #1e2f97;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin: 1rem;
+    }
+    button {
+      padding: 0.7rem 1.5rem;
+      border: none;
+      background: #1e2f97;
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    .section {
+      padding: 1rem 2rem;
+    }
+    .hidden { display: none; }
+
+    select, input, textarea {
+      width: 100%;
+      padding: 0.7rem;
+      margin: 0.5rem 0;
+    }
+
+    .card {
+      background: white;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #ccc;
+      margin-bottom: 1rem;
+    }
+
+    #success-msg {
+      background: #d4edda;
+      padding: 0.5rem;
+      color: #155724;
+      display: none;
+      border-radius: 5px;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>CorpGuru Consultancy</h1>
+  <p>C.S. NO. 2003/100, DINBANDHU HOUSING SOCIETY, NEAR MANJUSHRI HOTEL, TAL - SHIROL, DIST- KOLHAPUR, JAYSINGPUR - 416101</p>
+  <p>📞 9665995153</p>
+</header>
+
+<nav>
+  <button onclick="showSection('home')">Home</button>
+  <button onclick="showSection('form')">Apply for Consultancy</button>
+  <button onclick="showSection('admin')">Admin Login</button>
+</nav>
+
+<div id="home" class="section">
+  <div class="card">
+    <h2>Why Choose Us?</h2>
+    <ul>
+      <li>10+ Years of Experience</li>
+      <li>Complete Confidentiality</li>
+      <li>Affordable and Transparent Pricing</li>
+      <li>Dedicated Support for Every Client</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>📅 Compliance Dashboard</h2>
+    <ul>
+      <li>MCA Annual Return - Due 30th Sep</li>
+      <li>GST Return GSTR-3B - Due 20th every month</li>
+      <li>ITR Filing - Extended till 31st July</li>
+    </ul>
+    <p>✅ Sync with your calendar to never miss a deadline!</p>
+  </div>
+
+  <div class="card">
+    <h2>📚 Resource Center</h2>
+    <ul>
+      <li>How to Register a Private Ltd. Company in India</li>
+      <li>Top 5 Tax Saving Tips for Freelancers</li>
+      <li>Startup India Benefits You Should Know</li>
+    </ul>
+  </div>
+</div>
+
+<div id="form" class="section hidden">
+  <div class="card">
+    <h2>Apply for Consultancy</h2>
+    <div id="success-msg">Thank you! Your response has been submitted.</div>
+    <input type="text" id="name" placeholder="Full Name" />
+    <input type="text" id="phone" placeholder="Phone Number" />
+    <input type="email" id="email" placeholder="Email Address" />
+    <select id="service">
+      <option>Select Service</option>
+      <option>GST Registration</option>
+      <option>Income Tax Filing</option>
+      <option>Company Registration</option>
+      <option>MSME Registration</option>
+      <option>Shop Act License</option>
+      <option>Digital Signature</option>
+      <option>Import Export Code (IEC)</option>
+      <option>FSSAI License</option>
+      <option>Startup India Registration</option>
+      <option>Other</option>
+    </select>
+    <textarea id="message" rows="4" placeholder="Any Message or Query"></textarea>
+    <button onclick="submitForm()">Submit</button>
+  </div>
+</div>
+
+<div id="admin" class="section hidden">
+  <div class="card">
+    <h2>Admin Login</h2>
+    <input type="text" id="adminUser" placeholder="Username" />
+    <input type="password" id="adminPass" placeholder="Password" />
+    <button onclick="adminLogin()">Login</button>
+  </div>
+  <div id="adminPanel" class="hidden card">
+    <h3>Submitted Forms</h3>
+    <ul id="entries"></ul>
+    <button onclick="downloadExcel()">Download Excel</button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+<script>
+  let submissions = [];
+
+  function showSection(id) {
+    document.querySelectorAll(".section").forEach(s => s.classList.add("hidden"));
+    document.getElementById(id).classList.remove("hidden");
+  }
+
+  function submitForm() {
+    const name = document.getElementById("name").value;
+    const phone = document.getElementById("phone").value;
+    const email = document.getElementById("email").value;
+    const service = document.getElementById("service").value;
+    const msg = document.getElementById("message").value;
+
+    const data = { name, phone, email, service, msg, date: new Date().toLocaleString() };
+    submissions.push(data);
+
+    const content = `Name: ${name}\nPhone: ${phone}\nEmail: ${email}\nService: ${service}\nMessage: ${msg}`;
+    const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+    saveAs(blob, `${name}_consultancy.pdf`);
+
+    document.getElementById("success-msg").style.display = "block";
+    setTimeout(() => { document.getElementById("success-msg").style.display = "none"; }, 3000);
+
+    document.getElementById("name").value = "";
+    document.getElementById("phone").value = "";
+    document.getElementById("email").value = "";
+    document.getElementById("service").value = "Select Service";
+    document.getElementById("message").value = "";
+  }
+
+  function adminLogin() {
+    const user = document.getElementById("adminUser").value;
+    const pass = document.getElementById("adminPass").value;
+
+    if (user === "corpguru" && pass === "corpguru0101") {
+      document.getElementById("adminPanel").classList.remove("hidden");
+      const list = document.getElementById("entries");
+      list.innerHTML = "";
+
+      submissions.forEach((entry, i) => {
+        const li = document.createElement("li");
+        li.innerHTML = `${entry.name} - ${entry.service} <button onclick="downloadClient(${i})">Download PDF</button>`;
+        list.appendChild(li);
+      });
+    } else {
+      alert("Incorrect credentials!");
+    }
+  }
+
+  function downloadClient(index) {
+    const entry = submissions[index];
+    const content = `Name: ${entry.name}\nPhone: ${entry.phone}\nEmail: ${entry.email}\nService: ${entry.service}\nMessage: ${entry.msg}`;
+    const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+    saveAs(blob, `${entry.name}_consultancy.pdf`);
+  }
+
+  function downloadExcel() {
+    let csv = "Name,Phone,Email,Service,Message,Date\n";
+    submissions.forEach(e => {
+      csv += `"${e.name}","${e.phone}","${e.email}","${e.service}","${e.msg}","${e.date}"\n`;
+    });
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+    saveAs(blob, "consultancy_data.csv");
+  }
+</script>
+
+</body>
+</html>
